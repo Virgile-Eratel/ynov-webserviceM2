@@ -1,5 +1,12 @@
 import { Request, Response } from 'express';
-import { createNewProduct, getProductsJson, newProductsJson } from '../services/products.service';
+import {
+  createNewProduct,
+  getProductFromId,
+  getProductsJson,
+  newProductsJson,
+  removeProduct,
+  saveProduct,
+} from '../services/products.service';
 import { Product } from '../types';
 
 export const getList = async (_req: Request, res: Response): Promise<void> => {
@@ -46,3 +53,64 @@ export const post = async (req: Request, res: Response) => {
     res.status(400).json({ message: `Error create Product` });
   }
 };
+
+export const patch = async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const { title, category, ean, description, specs, price } = req.body ?? {};
+
+  const oldProduct = await getProductFromId(id);
+
+  const newProduct: Product = {
+    id: oldProduct.id,
+    title: title ?? oldProduct.title,
+    category: category ?? oldProduct.category,
+    ean: ean ?? oldProduct.ean,
+    description: description ?? oldProduct.description,
+    specs: specs ?? oldProduct.specs,
+    price: price ?? oldProduct.price,
+  };
+
+  const success = await saveProduct(newProduct);
+  if (success) {
+    res.status(201).json(newProduct);
+  } else {
+    res.status(400).json({ message: `Error patch Product` });
+  }
+};
+
+export const put = async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const { title, category, ean, description, specs, price } = req.body ?? {};
+
+  const oldProduct = await getProductFromId(id);
+
+  const newProduct: Product = {
+    id: oldProduct.id,
+    title: title ?? "",
+    category: category ?? "",
+    ean: ean ?? "",
+    description: description ?? "",
+    specs: specs ?? "",
+    price: price ?? null,
+  };
+
+  const success = await saveProduct(newProduct);
+  if (success) {
+    res.status(201).json(newProduct);
+  } else {
+    res.status(400).json({ message: `Error put Product` });
+  }
+};
+
+
+export const remove = async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+
+    const success = await removeProduct(id);
+  if (success) {
+    res.status(204).json();
+  } else {
+    res.status(400).json({ message: `Error put Product` });
+  }
+
+}
