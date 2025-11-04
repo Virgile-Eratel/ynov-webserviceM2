@@ -5,6 +5,7 @@ import {
   getProductsJson,
   newProductsJson,
   patchProduct,
+  postProduct,
   putProduct,
   removeProduct,
 } from '../services/products.service';
@@ -40,13 +41,8 @@ export const post = async (req: Request, res: Response) => {
     specs,
     price,
   };
-  const data = await getProductsJson();
-
-  const newProduct = createNewProduct(body);
-
-  data.push(newProduct);
-
-  const success = await newProductsJson(data);
+  
+  const {success, newProduct} = await postProduct(body);
 
   if (success) {
     res.status(201).json(newProduct);

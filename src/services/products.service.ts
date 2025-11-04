@@ -22,6 +22,21 @@ export const getProductFromId = async (id: number) => {
   return (await getProductsJson()).filter((product) => product.id === id)[0];
 };
 
+
+export const postProduct = async (body: Omit<Product, 'id'>) => {
+  const data = await getProductsJson();
+
+  const newProduct = createNewProduct(body);
+
+  data.push(newProduct);
+
+  const resultSaveProduct =await newProductsJson(data);
+  if (resultSaveProduct) {
+    return { success: true, newProduct };
+  }
+  return { success: false };
+}
+
 export const putProduct = async (payload: Product, oldIdProduct: number) => {
   const newProduct: Product = {
     ...payload,
