@@ -21,6 +21,9 @@ export const get = async (req: Request, res: Response): Promise<void> => {
 export const post = async (req: Request, res: Response) => {
   const { title, category, ean, description, specs, price } = req.body ?? {};
 
+  if (!(title && category && ean && description && specs && price)) {
+    return res.status(400).json({ message: `Error type Product` });
+  }
   const body: Omit<Product, 'id'> = {
     title,
     category,
@@ -31,7 +34,7 @@ export const post = async (req: Request, res: Response) => {
   };
   const data = await getProductsJson();
 
-  const newProduct = createNewProduct(data, body);
+  const newProduct = createNewProduct(body);
 
   data.push(newProduct);
 
