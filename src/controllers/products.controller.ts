@@ -4,6 +4,7 @@ import {
   getProductFromId,
   getProductsJson,
   newProductsJson,
+  patchProduct,
   putProduct,
   removeProduct,
 } from '../services/products.service';
@@ -69,7 +70,7 @@ export const patch = async (req: Request, res: Response) => {
 
   const { id, ...payload } = req.body;
 
-  const { success, newProduct } = await putProduct(payload, oldProduct.id);
+  const { success, newProduct } = await patchProduct(payload, oldProduct);
 
   if (success) {
     res.status(200).json(newProduct);
