@@ -19,33 +19,27 @@ export const get = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const post = async (req: Request, res: Response) => {
-  const title = req.body.title;
-  const category = req.body.category;
-  const ean = req.body.ean;
-  const description = req.body.description;
-  const specs = req.body.specs;
-  const price = Number(req.body.price);
+  const { title, category, ean, description, specs, price } = req.body ?? {};
 
   const body: Omit<Product, 'id'> = {
-    title: title,
-    category: category,
-    ean: ean,
-    description: description,
-    specs: specs,
-    price: price,
+    title,
+    category,
+    ean,
+    description,
+    specs,
+    price,
   };
   const data = await getProductsJson();
 
   const newProduct = createNewProduct(data, body);
 
-    data.push(newProduct);
+  data.push(newProduct);
 
-    const success = await newProductsJson(data);
+  const success = await newProductsJson(data);
 
-    if (success) {
-      res.status(201).json(newProduct);
-    } else {
-      res.status(400).json({ message: `Error create Product` });
-    }
-  
+  if (success) {
+    res.status(201).json(newProduct);
+  } else {
+    res.status(400).json({ message: `Error create Product` });
+  }
 };
