@@ -22,6 +22,30 @@ export const getProductFromId = async (id: number) => {
   return (await getProductsJson()).filter((product) => product.id === id)[0];
 };
 
+export const getListProduct = async (limit: number, page: number, s: any) => {
+  let data = await getProductsJson();
+  if (s) {
+    //recherche
+    data = researchProduct(s, data);
+  }
+  if (limit && page) {
+    //pagination
+    data = data.slice((page - 1) * limit, page * limit);
+  }
+
+  return data ?? [];
+};
+
+const researchProduct = (research: string, data: Product[]): Product[] => {
+  const valueLower = research.toLowerCase();
+
+  return data.filter(
+    (product) =>
+      product.title?.toLowerCase().includes(valueLower) ||
+      (product.description && product.description?.toLowerCase().includes(valueLower)) ||
+      product.category?.toLowerCase().includes(valueLower),
+  );
+};
 
 export const postProduct = async (body: Omit<Product, 'id'>) => {
   const data = await getProductsJson();
@@ -30,12 +54,12 @@ export const postProduct = async (body: Omit<Product, 'id'>) => {
 
   data.push(newProduct);
 
-  const resultSaveProduct =await newProductsJson(data);
+  const resultSaveProduct = await newProductsJson(data);
   if (resultSaveProduct) {
     return { success: true, newProduct };
   }
   return { success: false };
-}
+};
 
 export const putProduct = async (payload: Product, oldIdProduct: number) => {
   const newProduct: Product = {

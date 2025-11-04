@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import {
-  createNewProduct,
+  getListProduct,
   getProductFromId,
   getProductsJson,
-  newProductsJson,
   patchProduct,
   postProduct,
   putProduct,
@@ -11,8 +10,10 @@ import {
 } from '../services/products.service';
 import { Product } from '../types';
 
-export const getList = async (_req: Request, res: Response): Promise<void> => {
-  const data = await getProductsJson();
+export const getList = async (req: Request, res: Response): Promise<void> => {
+  //Pour la recherche mettre tt en minuscule
+  const { limit, page, s } = req.query;
+  const data = await getListProduct(Number(limit), Number(page), s);
   res.status(200).json(data);
 };
 
@@ -41,13 +42,13 @@ export const post = async (req: Request, res: Response) => {
     specs,
     price,
   };
-  
-  const {success, newProduct} = await postProduct(body);
+
+  const { success, newProduct } = await postProduct(body);
 
   if (success) {
     res.status(201).json(newProduct);
   } else {
-    res.status(400).json({ message: `Error create Product` });
+    res.status(500).json({ message: `Error create Product` });
   }
 };
 
@@ -71,7 +72,7 @@ export const patch = async (req: Request, res: Response) => {
   if (success) {
     res.status(200).json(newProduct);
   } else {
-    res.status(400).json({ message: `Error patch Product` });
+    res.status(500).json({ message: `Error patch Product` });
   }
 };
 
@@ -95,7 +96,7 @@ export const put = async (req: Request, res: Response) => {
   if (success) {
     res.status(200).json(newProduct);
   } else {
-    res.status(400).json({ message: `Error put Product` });
+    res.status(500).json({ message: `Error put Product` });
   }
 };
 
