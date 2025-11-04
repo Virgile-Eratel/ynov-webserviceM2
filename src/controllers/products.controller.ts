@@ -4,8 +4,8 @@ import {
   getProductFromId,
   getProductsJson,
   newProductsJson,
+  putProduct,
   removeProduct,
-  saveProduct,
 } from '../services/products.service';
 import { Product } from '../types';
 
@@ -26,9 +26,9 @@ export const get = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const post = async (req: Request, res: Response) => {
-  const { title, category, ean, description, specs, price } = req.body ?? {};
+  const { title, category, description, ean, specs, price } = req.body ?? {};
 
-  if (!(title && category && ean && description && specs && price)) {
+  if (!(title && category && ean && specs && price)) {
     return res.status(400).json({ message: `Error type Product` });
   }
   const body: Omit<Product, 'id'> = {
@@ -55,62 +55,60 @@ export const post = async (req: Request, res: Response) => {
 };
 
 export const patch = async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
-  const { title, category, ean, description, specs, price } = req.body ?? {};
+  const idParams = Number(req.params.id);
+  const { title, category, ean, specs, price } = req.body ?? {};
 
-  const oldProduct = await getProductFromId(id);
+  if (!(title && category && ean && specs && price)) {
+    return res.status(400).json({ message: `Error type Product` });
+  }
 
-  const newProduct: Product = {
-    id: oldProduct.id,
-    title: title ?? oldProduct.title,
-    category: category ?? oldProduct.category,
-    ean: ean ?? oldProduct.ean,
-    description: description ?? oldProduct.description,
-    specs: specs ?? oldProduct.specs,
-    price: price ?? oldProduct.price,
-  };
+  const oldProduct = await getProductFromId(idParams);
+  if (!oldProduct) {
+    return res.status(404).json({ message: `Error Product not exist` });
+  }
 
-  const success = await saveProduct(newProduct);
+  const { id, ...payload } = req.body;
+
+  const { success, newProduct } = await putProduct(payload, oldProduct.id);
+
   if (success) {
-    res.status(201).json(newProduct);
+    res.status(200).json(newProduct);
   } else {
     res.status(400).json({ message: `Error patch Product` });
   }
 };
 
 export const put = async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
-  const { title, category, ean, description, specs, price } = req.body ?? {};
+  const idParams = Number(req.params.id);
+  const { title, category, ean, specs, price } = req.body ?? {};
 
-  const oldProduct = await getProductFromId(id);
+  if (!(title && category && ean && specs && price)) {
+    return res.status(400).json({ message: `Error type Product` });
+  }
 
-  const newProduct: Product = {
-    id: oldProduct.id,
-    title: title ?? "",
-    category: category ?? "",
-    ean: ean ?? "",
-    description: description ?? "",
-    specs: specs ?? "",
-    price: price ?? null,
-  };
+  const oldProduct = await getProductFromId(idParams);
+  if (!oldProduct) {
+    return res.status(404).json({ message: `Error Product not exist` });
+  }
 
-  const success = await saveProduct(newProduct);
+  const { id, ...payload } = req.body;
+
+  const { success, newProduct } = await putProduct(payload, oldProduct.id);
+
   if (success) {
-    res.status(201).json(newProduct);
+    res.status(200).json(newProduct);
   } else {
     res.status(400).json({ message: `Error put Product` });
   }
 };
 
-
 export const remove = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
 
-    const success = await removeProduct(id);
+  const success = await removeProduct(id);
   if (success) {
     res.status(204).json();
   } else {
     res.status(400).json({ message: `Error put Product` });
   }
-
-}
+};

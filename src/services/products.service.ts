@@ -22,16 +22,43 @@ export const getProductFromId = async (id: number) => {
   return (await getProductsJson()).filter((product) => product.id === id)[0];
 };
 
-export const saveProduct = async (product: Product) => {
-  const successRemoveProduct = await removeProduct(product.id);
-  if (!successRemoveProduct) {
-    return false;
-  }
-  const data = await getProductsJson();
-  //ajout du produit modifié
-  data.push(product);
+export const putProduct = async (payload: Product, oldIdProduct: number) => {
+  const newProduct: Product = {
+    ...payload,
+    id: oldIdProduct,
+  };
 
-  return await newProductsJson(data);
+  const resultProduct = await saveProduct(newProduct);
+  if (resultProduct) {
+    return { success: true, newProduct };
+  }
+  return { success: false };
+};
+
+export const patchProduct = async (payload: Product, oldProduct: Product) => {
+  const newProduct: Product = {
+    ...oldProduct,
+    ...payload,
+  };
+
+  const resultProduct = await saveProduct(newProduct);
+  if (resultProduct) {
+    return { success: true, newProduct };
+  }
+  return { success: false };
+};
+
+export const saveProduct = async (product: Product) => {
+  const data = await getProductsJson();
+
+  //Modification dans data
+  const objWithIdIndex = data.findIndex((p) => p.id === product.id);
+  if (objWithIdIndex > -1) {
+    data[objWithIdIndex] = product;
+    await newProductsJson(data);
+    return true;
+  }
+  return false;
 };
 
 export const removeProduct = async (id: number) => {
