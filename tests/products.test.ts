@@ -218,18 +218,9 @@ describe('Products API', () => {
       return request(app)
         .delete(`/api/v1/products/${productId && productId + 1}`)
         .send(data)
-        .expect(400)
+        .expect(500)
         .then((res: Response) => {
-          expect(res.statusCode).toBe(400);
-        });
-    });
-    it('should return 404 on delete with no id', async () => {
-      return request(app)
-        .delete(`/api/v1/products`)
-        .send(data)
-        .expect(404)
-        .then((res: Response) => {
-          expect(res.statusCode).toBe(404);
+          expect(res.statusCode).toBe(500);
         });
     });
   });

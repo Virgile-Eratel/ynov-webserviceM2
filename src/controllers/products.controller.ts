@@ -31,7 +31,7 @@ export const get = async (req: Request, res: Response): Promise<void> => {
 export const post = async (req: Request, res: Response) => {
   const { title, category, description, ean, specs, price } = req.body ?? {};
 
-  if (!(title && category && ean && specs && price)) {
+  if (!(title && category && ean && specs && (price !== undefined) )) {
     return res.status(400).json({ message: `Error type Product` });
   }
   const body: Omit<Product, 'id'> = {
@@ -107,6 +107,6 @@ export const remove = async (req: Request, res: Response) => {
   if (success) {
     res.status(204).json();
   } else {
-    res.status(400).json({ message: `Error put Product` });
+    res.status(500).json({ message: `Error put Product` });
   }
 };
