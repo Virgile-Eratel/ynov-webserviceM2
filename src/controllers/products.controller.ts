@@ -14,6 +14,8 @@ export const getList = async (req: Request, res: Response): Promise<void> => {
   //Pour la recherche mettre tt en minuscule
   const { limit, page, s } = req.query;
   const data = await getListProduct(Number(limit), Number(page), s);
+  //utilisation du logger
+  //req.log.warn('test');
   res.status(200).json(data);
 };
 
@@ -31,7 +33,7 @@ export const get = async (req: Request, res: Response): Promise<void> => {
 export const post = async (req: Request, res: Response) => {
   const { title, category, description, ean, specs, price } = req.body ?? {};
 
-  if (!(title && category && ean && specs && (price !== undefined) )) {
+  if (!(title && category && ean && specs && price !== undefined)) {
     return res.status(400).json({ message: `Error type Product` });
   }
   const body: Omit<Product, 'id'> = {
