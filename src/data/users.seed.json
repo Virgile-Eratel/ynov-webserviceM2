@@ -1,0 +1,8 @@
+[
+  {
+    "id": "123456",
+    "email": "admin@example.com",
+    "passwordHash": "$2b$10$06GcA2.f89JObLh/JiB44.GOSVxpcklDHKuIDKEQ/WLLI9efv6dT2",
+    "role": "admin"
+  }
+]
