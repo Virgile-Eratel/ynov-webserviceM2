@@ -3,7 +3,6 @@ import { get, getList, patch, post, put, remove } from '../controllers/products.
 
 const productsRouter: Router = express.Router();
 
-//TODO ajouter les parameters pour la recherche et pagination
 /**
  * @swagger
  * /products:
@@ -29,6 +28,11 @@ const productsRouter: Router = express.Router();
  *     responses:
  *      200:
  *        description: Liste des poduits
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              $ref: '#/components/schemas/Product'
  */
 productsRouter.get('/', getList);
 /**
@@ -47,6 +51,10 @@ productsRouter.get('/', getList);
  *     responses:
  *      200:
  *        description: Produit trouvé
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Product'
  *      404:
  *        description: Produit non trouvé
  */
