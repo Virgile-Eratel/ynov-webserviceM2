@@ -67,6 +67,8 @@ productsRouter.get('/:id', get);
  *   post:
  *     summary: Crée un nouveau produit
  *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *      required: true
  *      content:
@@ -82,6 +84,10 @@ productsRouter.get('/:id', get);
  *              $ref: '#/components/schemas/Product'
  *      400:
  *        description: Requête invalide
+ *      401:
+ *        description: Non authentifié - token manquant ou invalide
+ *      403:
+ *        description: Role insuffisant
  */
 productsRouter.post('/', auth, authorize(RoleEnum.admin), post);
 /**
@@ -90,6 +96,8 @@ productsRouter.post('/', auth, authorize(RoleEnum.admin), post);
  *   put:
  *     summary: Modifit un produit en écrasant les données
  *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -112,6 +120,10 @@ productsRouter.post('/', auth, authorize(RoleEnum.admin), post);
  *              $ref: '#/components/schemas/Product'
  *      400:
  *        description: Requête invalide
+ *      401:
+ *        description: Non authentifié - token manquant ou invalide
+ *      403:
+ *        description: Role insuffisant
  *      500:
  *        description: Erreur lors de la modification
  */
@@ -122,6 +134,8 @@ productsRouter.put('/:id', auth, authorize(RoleEnum.admin), put);
  *   patch:
  *     summary: Modifit un produit sans écraser les données
  *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -144,6 +158,10 @@ productsRouter.put('/:id', auth, authorize(RoleEnum.admin), put);
  *              $ref: '#/components/schemas/Product'
  *      400:
  *        description: Requête invalide
+ *      401:
+ *        description: Non authentifié - token manquant ou invalide
+ *      403:
+ *        description: Role insuffisant
  *      500:
  *        description: Erreur lors de la modification
  */
@@ -154,6 +172,8 @@ productsRouter.patch('/:id', auth, authorize(RoleEnum.admin), patch);
  *   delete:
  *     summary: Supprime un produit via son identifiant
  *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -164,6 +184,10 @@ productsRouter.patch('/:id', auth, authorize(RoleEnum.admin), patch);
  *     responses:
  *      204:
  *        description: Produit supprimé
+ *      401:
+ *        description: Non authentifié - token manquant ou invalide
+ *      403:
+ *        description: Role insuffisant
  *      500:
  *        description: Erreur lors de la suppression
  */

@@ -14,6 +14,14 @@ const swaggerOptions = {
       },
     ],
     components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          description: "JWT nécessaire dans l'en tête Authorization: Bearer <token>",
+        },
+      },
       schemas: {
         ...ProductSchema,
         ...ProductSchemaNew,

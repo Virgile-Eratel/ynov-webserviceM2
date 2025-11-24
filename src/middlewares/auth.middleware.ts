@@ -24,7 +24,7 @@ export function authorize(...roles: Role[]) {
       throw res.status(401).json({ message: "Unauthorized" });
     
     if (roles.length && !roles.includes(user.role))
-      throw res.status(401).json({ message: "Insufficient role" });
+      throw res.status(403).json({ message: "Insufficient role" });
 
     next();
   }
