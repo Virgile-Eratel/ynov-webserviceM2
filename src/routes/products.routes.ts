@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import { get, getList, patch, post, put, remove } from '../controllers/products.controller';
-import { auth } from '../middlewares/auth.middleware';
+import { auth, authorize } from '../middlewares/auth.middleware';
+import { RoleEnum } from '../types/role';
 
 const productsRouter: Router = express.Router();
 
@@ -82,7 +83,7 @@ productsRouter.get('/:id', get);
  *      400:
  *        description: Requête invalide
  */
-productsRouter.post('/', auth, post);
+productsRouter.post('/', auth, authorize(RoleEnum.admin), post);
 /**
  * @swagger
  * /products/{id}:
@@ -114,7 +115,7 @@ productsRouter.post('/', auth, post);
  *      500:
  *        description: Erreur lors de la modification
  */
-productsRouter.put('/:id', auth, put);
+productsRouter.put('/:id', auth, authorize(RoleEnum.admin), put);
 /**
  * @swagger
  * /products/{id}:
@@ -146,7 +147,7 @@ productsRouter.put('/:id', auth, put);
  *      500:
  *        description: Erreur lors de la modification
  */
-productsRouter.patch('/:id', auth, patch);
+productsRouter.patch('/:id', auth, authorize(RoleEnum.admin), patch);
 /**
  * @swagger
  * /products/{id}:
@@ -166,6 +167,6 @@ productsRouter.patch('/:id', auth, patch);
  *      500:
  *        description: Erreur lors de la suppression
  */
-productsRouter.delete('/:id', auth, remove);
+productsRouter.delete('/:id', auth, authorize(RoleEnum.admin), remove);
 
 export default productsRouter;
