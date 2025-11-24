@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import { get, getList, patch, post, put, remove } from '../controllers/products.controller';
+import { auth } from '../middlewares/auth.middleware';
 
 const productsRouter: Router = express.Router();
 
@@ -81,7 +82,7 @@ productsRouter.get('/:id', get);
  *      400:
  *        description: Requête invalide
  */
-productsRouter.post('/', post);
+productsRouter.post('/', auth, post);
 /**
  * @swagger
  * /products/{id}:
@@ -113,7 +114,7 @@ productsRouter.post('/', post);
  *      500:
  *        description: Erreur lors de la modification
  */
-productsRouter.put('/:id', put);
+productsRouter.put('/:id', auth, put);
 /**
  * @swagger
  * /products/{id}:
@@ -145,7 +146,7 @@ productsRouter.put('/:id', put);
  *      500:
  *        description: Erreur lors de la modification
  */
-productsRouter.patch('/:id', patch);
+productsRouter.patch('/:id', auth, patch);
 /**
  * @swagger
  * /products/{id}:
@@ -165,6 +166,6 @@ productsRouter.patch('/:id', patch);
  *      500:
  *        description: Erreur lors de la suppression
  */
-productsRouter.delete('/:id', remove);
+productsRouter.delete('/:id', auth, remove);
 
 export default productsRouter;
