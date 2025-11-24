@@ -1,8 +1,1 @@
-[
-  {
-    "id": "123456",
-    "email": "admin@example.com",
-    "passwordHash": "$2b$10$06GcA2.f89JObLh/JiB44.GOSVxpcklDHKuIDKEQ/WLLI9efv6dT2",
-    "role": "admin"
-  }
-]
+[{"id":"123456","email":"admin@example.com","passwordHash":"$2b$10$06GcA2.f89JObLh/JiB44.GOSVxpcklDHKuIDKEQ/WLLI9efv6dT2","role":"admin"},{"id":"id-1763984896691","email":"admin1@example.com","passwordHash":"$2b$10$ayV0QGrNmbhobdaV1azl9.d3twpBxFsjH2r50dP2c5ntTtaUkIFYu","role":"admin"},{"id":"id-1763985404019","email":"admin2@example.com","passwordHash":"$2b$10$tskrmsrmZtWMJktio1e62OKkrOlZQK1wo0Ia1GsgOomLoPYpJB//W","role":"admin"},{"id":"id-1763985426125","email":"admin3@example.com","passwordHash":"$2b$10$uU0AgjRiw.PG9YEEZtA2heYp0Z5MhToD1.ZL0P1XiZ3yf5Z8sdSq.","role":"admin"},{"id":"id-1763985461964","email":"admin4@example.com","passwordHash":"$2b$10$.i6jNgCPFVME5AziSJa4ouRkOhTaRKLPY3pWBisbi/OdGZtwx6upC","role":"admin"},{"id":"id-1763985758401","email":"admin5@example.com","passwordHash":"$2b$10$vKx5Xzlo8nxusXqUwzVPieMKm2WbMxifqRxSKbx9AIf2LfQxh4PRW","role":"admin"},{"id":"id-1763985782361","email":"user@example.com","passwordHash":"$2b$10$IeVrKJ2WIsDJsQw7wBEXuuEWJpoB0/t5sEbiAbPiLfEQ2BnKwKqzu","role":"user"},{"id":"id-1763991486329","email":"test@test.com","passwordHash":"$2b$10$.ZsrA3oDtk8EwRmn1MNuReB4bXL6atoKcRzk5w36KOLBCyr3fgLd.","role":"admin"}]

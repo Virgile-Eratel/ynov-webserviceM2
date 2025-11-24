@@ -1,4 +1,5 @@
 import { ProductSchema, ProductSchemaNew } from './components/schemas/product.schema';
+import { UserSchema, NewUserSchema, AuthResponseSchema, LoginSchema, TokenResponseSchema } from './components/schemas/user.schema';
 
 const swaggerOptions = {
   definition: {
@@ -25,6 +26,11 @@ const swaggerOptions = {
       schemas: {
         ...ProductSchema,
         ...ProductSchemaNew,
+        ...UserSchema,
+        ...NewUserSchema,
+        ...AuthResponseSchema,
+        ...LoginSchema,
+        ...TokenResponseSchema,
       },
     },
   },
