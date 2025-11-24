@@ -5,12 +5,14 @@ import { notFound } from './middlewares';
 import pinoHttp from './middlewares/pinoHttp.middleware';
 import routes from './routes';
 import health from './routes/health';
+import limiter from './middlewares/limiter.middleware';
 
 const app = express();
 
 const swaggerJsdoc = require('swagger-jsdoc');
 const specs = swaggerJsdoc(swaggerOptions);
 
+app.use(limiter);
 app.use(pinoHttp);
 app.use(express.json({}));
 app.use(health);
