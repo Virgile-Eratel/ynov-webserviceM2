@@ -80,11 +80,6 @@ export const patch = async (req: Request, res: Response) => {
 
 export const put = async (req: Request, res: Response) => {
   const idParams = Number(req.params.id);
-  const { title, category, ean, specs, price } = req.body ?? {};
-
-  if (!(title && category && ean && specs && price)) {
-    return res.status(400).json({ message: `Error type Product` });
-  }
 
   const oldProduct = await getProductFromId(idParams);
   if (!oldProduct) {
@@ -93,7 +88,7 @@ export const put = async (req: Request, res: Response) => {
 
   const { id, ...payload } = req.body;
 
-  const { success, newProduct } = await putProduct(payload, oldProduct.id);
+  const { success, newProduct } = await putProduct({ ...oldProduct, ...payload }, oldProduct.id);
 
   if (success) {
     res.status(200).json(newProduct);

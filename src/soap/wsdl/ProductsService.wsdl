@@ -30,12 +30,55 @@
   <message name="ListProductsResponse">
     <part name="products" type="pns:Product" />
   </message>
+  <message name="GetProductRequest">
+      <part name="id" type="int" />
+  </message>
+  <message name="GetProductResponse">
+    <part name="product" type="pns:Product" />
+  </message>
+  <message name="PutProductRequest">
+      <part name="id" type="int" />
+      <part name="product" type="pns:Product" />
+  </message>
+  <message name="PutProductResponse">
+    <part name="product" type="pns:Product" />
+  </message>
+  <message name="PatchProductRequest">
+      <part name="id" type="int" />
+      <part name="product" type="pns:Product" />
+  </message>
+  <message name="PatchProductResponse">
+    <part name="product" type="pns:Product" />
+  </message>
+  <message name="PostProductRequest">
+      <part name="product" type="pns:Product" />
+  </message>
+  <message name="PostProductResponse">
+    <part name="product" type="pns:Product" />
+  </message>
+
   
   <!-- Liste des opérations disponibles -->
   <portType name="ProductsServicePort">
     <operation name="ListProducts">
       <input message="pns:ListProductsRequest" />
       <output message="pns:ListProductsResponse" />
+    </operation>
+    <operation name="GetProduct">
+      <input message="pns:GetProductRequest" />
+      <output message="pns:GetProductResponse" />
+    </operation>
+    <operation name="PutProduct">
+      <input message="pns:PutProductRequest" />
+      <output message="pns:PutProductResponse" />
+    </operation>
+    <operation name="PatchProduct">
+      <input message="pns:PatchProductRequest" />
+      <output message="pns:PatchProductResponse" />
+    </operation>
+    <operation name="PostProduct">
+      <input message="pns:PostProductRequest" />
+      <output message="pns:PostProductResponse" />
     </operation>
   </portType>
 
@@ -44,6 +87,50 @@
     <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
     <operation name="ListProducts">
       <soap:operation soapAction="ListProducts" />
+      <input>
+        <soap:body use="encoded" namespace="http://localhost:4000/soap/products"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="http://localhost:4000/soap/products"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
+      </output>
+    </operation>
+    <operation name="GetProduct">
+      <soap:operation soapAction="GetProduct" />
+      <input>
+        <soap:body use="encoded" namespace="http://localhost:4000/soap/products"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="http://localhost:4000/soap/products"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
+      </output>
+    </operation>
+    <operation name="PutProduct">
+      <soap:operation soapAction="PutProduct" />
+      <input>
+        <soap:body use="encoded" namespace="http://localhost:4000/soap/products"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="http://localhost:4000/soap/products"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
+      </output>
+    </operation>
+    <operation name="PatchProduct">
+      <soap:operation soapAction="PutProduct" />
+      <input>
+        <soap:body use="encoded" namespace="http://localhost:4000/soap/products"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="http://localhost:4000/soap/products"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
+      </output>
+    </operation>
+    <operation name="PostProduct">
+      <soap:operation soapAction="PostProduct" />
       <input>
         <soap:body use="encoded" namespace="http://localhost:4000/soap/products"
             encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
