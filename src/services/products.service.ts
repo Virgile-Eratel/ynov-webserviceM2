@@ -36,6 +36,10 @@ export const getListProduct = async (limit: number, page: number, s: any) => {
   return data ?? [];
 };
 
+export const getListAllProduct = async () => {
+  return await getProductsJson();
+}
+
 const researchProduct = (research: string, data: Product[]): Product[] => {
   const valueLower = research.toLowerCase();
 
