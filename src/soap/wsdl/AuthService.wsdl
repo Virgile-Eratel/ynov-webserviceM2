@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<definitions name="AuthService"
+  targetNamespace="http://localhost:4000/soap/auth"
+  xmlns:ans="http://localhost:4000/soap/auth"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:wsql="http://schemas.xmlsoap.org/wsdl/">
+
+  <!-- Messages -->
+  <message name="LoginRequest">
+      <part name="email" type="string" />
+      <part name="password" type="string" />
+  </message>
+  <message name="LoginResponse">
+    <part name="token" type="string" />
+  </message>
+  
+  <!-- Liste des opérations disponibles -->
+  <portType name="AuthServicePort">
+    <operation name="Login">
+      <input message="ans:LoginRequest" />
+      <output message="ans:LoginResponse" />
+    </operation>
+  </portType>
+
+  <!-- Bindings -->
+  <binding name="AuthServiceBinding" type="ans:AuthServicePort">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="Login">
+      <soap:operation soapAction="Login" />
+      <input>
+        <soap:body use="encoded" namespace="http://localhost:4000/soap/auth"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="http://localhost:4000/soap/auth"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
+      </output>
+    </operation>
+  </binding>
+
+  <!-- Service -->
+  <service name="AuthService">
+    <port name="AuthServicePort" binding="ans:AuthServiceBinding">
+      <soap:address location="http://localhost:4000/soap/auth/" />
+    </port>
+  </service>
+
+
+</definitions>
