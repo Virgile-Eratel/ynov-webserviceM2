@@ -95,7 +95,7 @@ export const saveProduct = async (product: Product) => {
   const data = await getProductsJson();
 
   //Modification dans data
-  const objWithIdIndex = data.findIndex((p) => p.id === product.id);
+  const objWithIdIndex = data.findIndex((p) => p.id === Number(product.id));
   if (objWithIdIndex > -1) {
     data[objWithIdIndex] = product;
     await newProductsJson(data);

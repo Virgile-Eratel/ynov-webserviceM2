@@ -56,6 +56,12 @@
   <message name="PostProductResponse">
     <part name="product" type="pns:Product" />
   </message>
+  <message name="DelectProductRequest">
+      <part name="id" type="int" />
+  </message>
+  <message name="DeleteProductResponse">
+    <part name="success" type="xsd:boolean" />
+  </message>
 
   
   <!-- Liste des opérations disponibles -->
@@ -79,6 +85,10 @@
     <operation name="PostProduct">
       <input message="pns:PostProductRequest" />
       <output message="pns:PostProductResponse" />
+    </operation>
+    <operation name="DeleteProduct">
+      <input message="pns:DelectProductRequest" />
+      <output message="pns:DeleteProductResponse" />
     </operation>
   </portType>
 
@@ -131,6 +141,17 @@
     </operation>
     <operation name="PostProduct">
       <soap:operation soapAction="PostProduct" />
+      <input>
+        <soap:body use="encoded" namespace="http://localhost:4000/soap/products"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="http://localhost:4000/soap/products"
+            encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
+      </output>
+    </operation>
+    <operation name="DeleteProduct">
+      <soap:operation soapAction="DeleteProduct" />
       <input>
         <soap:body use="encoded" namespace="http://localhost:4000/soap/products"
             encodingStyle="http://schemas.xmlsoap.org/soap/encoding" />
