@@ -2,10 +2,15 @@ import path from 'path';
 import { User } from '../types/user';
 import { FILE_JSON_USERS } from '../utils/constants';
 import { parseJsonFile, writeJsonFile } from '../utils/utils';
+import { UserModel } from '../models/userSchema.model';
 
-export const getUsersByEmail = async (email: string): Promise<User | undefined> => {
-  const users: User[] = await parseJsonFile<User[]>(path.resolve(FILE_JSON_USERS));
-  return users.find((u: User) => u.email.toLowerCase() === email);
+export const getUsersByEmail = async (email: string) => {
+  const eamilRegex = new RegExp(`^${email}$`, 'i');
+  
+  const user = UserModel.findOne({email: {$regex: eamilRegex}})
+
+  if(!user) return undefined
+  return user;
 };
 
 export const createNewUser = (user: Omit<User, 'id'>): User => {
@@ -24,14 +29,8 @@ export const newUsersJson = async (data: User[]) => {
 };
 
 export const postUser = async (body: Omit<User, 'id'>) => {
-  const data = await getUsersJson();
-
-  const newUser = createNewUser(body);
-
-  data.push(newUser);
-
-  const resultSaveProduct = await newUsersJson(data);
-  if (resultSaveProduct) {
+  const newUser = await UserModel.create(body)
+  if (newUser) {
     return { success: true, newUser };
   }
   return { success: false };

@@ -33,11 +33,9 @@ export const getListProduct = async (limit: number = 10, page: number = 1, s?: s
     ];
   }
 
-  const products = await ProductModel.find(filter)
+  return ProductModel.find(filter)
     .skip((page - 1) * limit)
     .limit(limit)
-
-  return products;
 };
 
 

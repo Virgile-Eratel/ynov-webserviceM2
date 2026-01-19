@@ -6,7 +6,7 @@ import { Role } from '../types/role';
 
 export const login = async (email: string, password: string): Promise<{token: string| null, isAuthenticated:boolean}> => {
 
-  const user: User | undefined = await getUsersByEmail(email);
+  const user = await getUsersByEmail(email);
   if (!user) return {token: null, isAuthenticated: false};
 
   // création du hash
@@ -21,7 +21,7 @@ export const login = async (email: string, password: string): Promise<{token: st
 
 export const register = async (email: string, password: string, role: Role): Promise<{user: Omit<User, 'passwordHash'> | null,token: string| null}> => {
 
-  const user: User | undefined = await getUsersByEmail(email);
+  const user = await getUsersByEmail(email);
   if (user) throw Error("Erreur lors de la création du User");
 
   // création du hash
