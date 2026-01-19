@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import path from 'path';
 import { ProductModel } from '../models/productSchema.model';
 import { Product } from '../types';
@@ -8,19 +9,13 @@ export const getProductsJson = async () => {
   return await parseJsonFile<Product[]>(path.resolve(FILE_JSON));
 };
 
+// ancienne version
 export const newProductsJson = async (data: Product[]) => {
   return await writeJsonFile(path.resolve(FILE_JSON), data);
 };
 
-export const createNewProduct = (product: Omit<Product, 'id'>): Product => {
-  return {
-    id: Date.now(),
-    ...product,
-  };
-};
-
-export const getProductFromId = async (id: number) => {
-  return (await getProductsJson()).filter((product) => product.id === id)[0];
+export const getProductFromId = async (id: string) => {
+  return await ProductModel.findById(new mongoose.Types.ObjectId(id));
 };
 
 export const getListProduct = async (limit: number, page: number, s: any) => {
@@ -54,70 +49,49 @@ const researchProduct = (research: string, data: Product[]): Product[] => {
 };
 
 export const postProduct = async (body: Omit<Product, 'id'>) => {
-  const data = await getProductsJson();
+  const resultSaveProduct = await ProductModel.create(body);
 
-  const newProduct = createNewProduct(body);
-
-  data.push(newProduct);
-
-  const resultSaveProduct = await newProductsJson(data);
   if (resultSaveProduct) {
-    return { success: true, newProduct };
+    return { success: true, newProduct: resultSaveProduct };
   }
   return { success: false };
 };
 
-export const putProduct = async (payload: Product, oldIdProduct: number) => {
+export const putProduct = async (idParams: string, payload: Product) => {
   const newProduct: Product = {
     ...payload,
-    id: oldIdProduct,
   };
 
-  const resultProduct = await saveProduct(newProduct);
+  const oldProduct = await getProductFromId(idParams);
+  if (!oldProduct) return { success: false };
+
+  const resultProduct = await ProductModel.findOneAndReplace({ _id: oldProduct._id }, newProduct);
   if (resultProduct) {
     return { success: true, newProduct };
   }
   return { success: false };
 };
 
-export const patchProduct = async (payload: Product, oldProduct: Product) => {
+export const patchProduct = async (idParams: string, payload: Product) => {
+  const oldProduct = await getProductFromId(idParams);
+  if (!oldProduct) return { success: false };
+
   const newProduct: Product = {
     ...oldProduct,
     ...payload,
+    description: (payload.description ?? oldProduct.description) || undefined,
   };
 
-  const resultProduct = await saveProduct(newProduct);
+  const resultProduct = await ProductModel.findOneAndUpdate({ _id: oldProduct._id }, newProduct);
   if (resultProduct) {
-    return { success: true, newProduct };
+    return { success: true, resultProduct: resultProduct.toJSON<Product>() };
   }
   return { success: false };
 };
 
-export const saveProduct = async (product: Product) => {
-  const data = await getProductsJson();
-
-  //Modification dans data
-  const objWithIdIndex = data.findIndex((p) => p.id === Number(product.id));
-  if (objWithIdIndex > -1) {
-    data[objWithIdIndex] = product;
-    await newProductsJson(data);
-    return true;
-  }
-  return false;
-};
-
-export const removeProduct = async (id: number) => {
-  const data = await getProductsJson();
-
-  const objWithIdIndex = data.findIndex((p) => p.id === id);
-
-  if (objWithIdIndex > -1) {
-    //suppression dans le tableau
-    data.splice(objWithIdIndex, 1);
-    await newProductsJson(data);
-    return true;
-  }
-  return false;
+export const removeProduct = async (id: string) => {
+  const success = await ProductModel.findByIdAndDelete(id);
+  return success;
 };
 
 export const seedProducts = async () => {

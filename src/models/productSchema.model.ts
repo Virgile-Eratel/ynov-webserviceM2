@@ -17,3 +17,15 @@ export const ProductSchema = new mongoose.Schema(
 );
 
 export const ProductModel = mongoose.model('Product', ProductSchema);
+
+ProductSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: (_doc, ret) => {
+    const { _id, createdAt, updatedAt, ...rest } = ret;
+    return {
+      id: _id.toString(),
+      ...rest,
+    };
+  },
+});

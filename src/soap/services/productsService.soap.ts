@@ -21,7 +21,7 @@ export const productsService: IServices = {
       },
       GetProduct: async function ({ id }: { id: string }, callback: SoapCallbackFunction) {
         if (!callback) return;
-        const product = await getProductFromId(Number(id));
+        const product = await getProductFromId(id);
         if (product) {
           callback({ product });
         }
@@ -55,9 +55,9 @@ export const productsService: IServices = {
             },
           });
         }
-        const oldProduct = await getProductFromId(Number(id));
+        const oldProduct = await getProductFromId(id);
         if (!oldProduct) throw Error('Produit non trouvé');
-        const { newProduct, success } = await putProduct({ ...oldProduct, ...rest }, oldProduct.id);
+        const { newProduct, success } = await putProduct(oldProduct.id, { ...oldProduct, ...rest });
         if (success) {
           callback({ newProduct });
         }
@@ -100,17 +100,15 @@ export const productsService: IServices = {
         if (!(title && category && ean && specs && price !== undefined)) {
           throw Error('Error type Produit');
         }
-        const numberId = Number(id);
 
-        const oldProduct = await getProductFromId(Number(id));
+        const oldProduct = await getProductFromId(id);
         if (!oldProduct) throw Error('Produit non trouvé');
 
-        const { success, newProduct } = await patchProduct(
-          { id: numberId, title, category, description, ean, specs, price },
-          oldProduct,
+        const { success, resultProduct } = await patchProduct( id,
+          { id, title, category, description, ean, specs, price },
         );
         if (success) {
-          callback({ newProduct });
+          callback({ resultProduct });
         }
         return callback({
           Fault: {
@@ -192,7 +190,7 @@ export const productsService: IServices = {
             },
           });
         }
-        const success = await removeProduct(Number(id));
+        const success = await removeProduct(id);
         if (success) {
           callback({ success });
         }
