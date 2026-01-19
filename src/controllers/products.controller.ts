@@ -8,6 +8,7 @@ import {
   postProduct,
   putProduct,
   removeProduct,
+  seedProducts,
 } from '../services/products.service';
 import { Product } from '../types';
 
@@ -112,3 +113,9 @@ export const remove = async (req: Request, res: Response) => {
     res.status(500).json({ message: `Error put Product` });
   }
 };
+
+
+export const seed = async (_req: Request, res: Response) => {
+  await seedProducts();
+  res.status(201).json({message: 'products seed generated'});
+}

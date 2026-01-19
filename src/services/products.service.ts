@@ -1,8 +1,8 @@
 import path from 'path';
+import { ProductModel } from '../models/productSchema.model';
 import { Product } from '../types';
 import { FILE_JSON } from '../utils/constants';
 import { parseJsonFile, writeJsonFile } from '../utils/utils';
-import { ProductModel } from '../models/productSchema.model';
 
 export const getProductsJson = async () => {
   return await parseJsonFile<Product[]>(path.resolve(FILE_JSON));
@@ -25,7 +25,7 @@ export const getProductFromId = async (id: number) => {
 
 export const getListProduct = async (limit: number, page: number, s: any) => {
   const data = await ProductModel.find().exec();
-  let formatedData = data.map((p)=> p.toJSON()) as any as Product[]
+  let formatedData = data.map((p) => p.toJSON()) as unknown as Product[];
   if (s) {
     //recherche
     formatedData = researchProduct(s, formatedData);
@@ -39,8 +39,8 @@ export const getListProduct = async (limit: number, page: number, s: any) => {
 };
 
 export const getListAllProduct = async () => {
-  return ProductModel.find().exec()
-}
+  return ProductModel.find().exec();
+};
 
 const researchProduct = (research: string, data: Product[]): Product[] => {
   const valueLower = research.toLowerCase();
@@ -118,4 +118,10 @@ export const removeProduct = async (id: number) => {
     return true;
   }
   return false;
+};
+
+export const seedProducts = async () => {
+  const products: Product[] = await getProductsJson();
+  await ProductModel.deleteMany();
+  await ProductModel.insertMany(products);
 };

@@ -1,9 +1,11 @@
 import express, { Router } from 'express';
-import { get, getList, patch, post, put, remove } from '../controllers/products.controller';
+import { get, getList, patch, post, put, remove, seed } from '../controllers/products.controller';
 import { auth, authorize } from '../middlewares/auth.middleware';
 import { RoleEnum } from '../types/role';
 
 const productsRouter: Router = express.Router();
+
+productsRouter.post('/seed', seed);
 
 /**
  * @swagger
