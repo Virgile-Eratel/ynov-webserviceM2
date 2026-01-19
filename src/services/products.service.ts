@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { QueryFilter} from 'mongoose';
 import path from 'path';
 import { ProductModel } from '../models/productSchema.model';
 import { Product } from '../types';
@@ -18,34 +18,31 @@ export const getProductFromId = async (id: string) => {
   return await ProductModel.findById(new mongoose.Types.ObjectId(id));
 };
 
-export const getListProduct = async (limit: number, page: number, s: any) => {
-  const data = await ProductModel.find().exec();
-  let formatedData = data.map((p) => p.toJSON()) as unknown as Product[];
+
+export const getListProduct = async (limit: number = 10, page: number = 1, s?: string) => {
+  
+  const filter: QueryFilter<Product> = {};
+
   if (s) {
-    //recherche
-    formatedData = researchProduct(s, formatedData);
-  }
-  if (limit && page) {
-    //pagination
-    formatedData = formatedData.slice((page - 1) * limit, page * limit);
+    const searchRegex = new RegExp(s, 'i');
+
+    filter.$or = [
+      { title: { $regex: searchRegex } },
+      { description: { $regex: searchRegex } },
+      { category: { $regex: searchRegex } },
+    ];
   }
 
-  return formatedData ?? [];
+  const products = await ProductModel.find(filter)
+    .skip((page - 1) * limit)
+    .limit(limit)
+
+  return products;
 };
+
 
 export const getListAllProduct = async () => {
   return ProductModel.find().exec();
-};
-
-const researchProduct = (research: string, data: Product[]): Product[] => {
-  const valueLower = research.toLowerCase();
-
-  return data.filter(
-    (product) =>
-      product.title?.toLowerCase().includes(valueLower) ||
-      (product.description && product.description?.toLowerCase().includes(valueLower)) ||
-      product.category?.toLowerCase().includes(valueLower),
-  );
 };
 
 export const postProduct = async (body: Omit<Product, 'id'>) => {
@@ -65,7 +62,7 @@ export const putProduct = async (idParams: string, payload: Product) => {
   const oldProduct = await getProductFromId(idParams);
   if (!oldProduct) return { success: false };
 
-  const resultProduct = await ProductModel.findOneAndReplace({ _id: oldProduct._id }, newProduct);
+  const resultProduct = await ProductModel.findOneAndReplace({ _id: oldProduct._id }, newProduct, { new: true });
   if (resultProduct) {
     return { success: true, newProduct };
   }
@@ -82,9 +79,9 @@ export const patchProduct = async (idParams: string, payload: Product) => {
     description: (payload.description ?? oldProduct.description) || undefined,
   };
 
-  const resultProduct = await ProductModel.findOneAndUpdate({ _id: oldProduct._id }, newProduct);
+  const resultProduct = await ProductModel.findOneAndUpdate({ _id: oldProduct._id }, newProduct, { new: true });
   if (resultProduct) {
-    return { success: true, resultProduct: resultProduct.toJSON<Product>() };
+    return { success: true, resultProduct };
   }
   return { success: false };
 };

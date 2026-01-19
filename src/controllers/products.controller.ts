@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import {
-  getListAllProduct,
   getListProduct,
   getProductFromId,
   patchProduct,
@@ -12,13 +11,14 @@ import {
 import { Product } from '../types';
 
 export const getList = async (req: Request, res: Response): Promise<void> => {
-  //Pour la recherche mettre tt en minuscule
   const { limit, page, s } = req.query;
-  let data = [];
-  if (limit || page || s) data = await getListProduct(Number(limit), Number(page), s);
-  else data = await getListAllProduct();
-  //utilisation du logger
-  //req.log.warn('test');
+
+  const limitF = limit ? Number(limit) : undefined;
+  const pageF = page ? Number(page) : undefined;
+  const sF = s ? String(s) : undefined;
+
+  const data = await getListProduct(limitF, pageF, sF);
+
   res.status(200).json(data);
 };
 
