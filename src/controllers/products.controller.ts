@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import {
+  getListAllProduct,
   getListProduct,
   getProductFromId,
   getProductsJson,
@@ -13,7 +14,11 @@ import { Product } from '../types';
 export const getList = async (req: Request, res: Response): Promise<void> => {
   //Pour la recherche mettre tt en minuscule
   const { limit, page, s } = req.query;
-  const data = await getListProduct(Number(limit), Number(page), s);
+  let data = [];
+  if (limit || page || s)
+    data = await getListProduct(Number(limit), Number(page), s);
+  else 
+    data = await getListAllProduct();
   //utilisation du logger
   //req.log.warn('test');
   res.status(200).json(data);

@@ -2,6 +2,7 @@ import path from 'path';
 import { Product } from '../types';
 import { FILE_JSON } from '../utils/constants';
 import { parseJsonFile, writeJsonFile } from '../utils/utils';
+import { ProductModel } from '../models/productSchema.model';
 
 export const getProductsJson = async () => {
   return await parseJsonFile<Product[]>(path.resolve(FILE_JSON));
@@ -23,21 +24,22 @@ export const getProductFromId = async (id: number) => {
 };
 
 export const getListProduct = async (limit: number, page: number, s: any) => {
-  let data = await getProductsJson();
+  const data = await ProductModel.find().exec();
+  let formatedData = data.map((p)=> p.toJSON()) as any as Product[]
   if (s) {
     //recherche
-    data = researchProduct(s, data);
+    formatedData = researchProduct(s, formatedData);
   }
   if (limit && page) {
     //pagination
-    data = data.slice((page - 1) * limit, page * limit);
+    formatedData = formatedData.slice((page - 1) * limit, page * limit);
   }
 
-  return data ?? [];
+  return formatedData ?? [];
 };
 
 export const getListAllProduct = async () => {
-  return await getProductsJson();
+  return ProductModel.find().exec()
 }
 
 const researchProduct = (research: string, data: Product[]): Product[] => {
