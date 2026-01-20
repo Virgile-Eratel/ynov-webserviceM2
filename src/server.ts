@@ -12,7 +12,7 @@ const bootstrap = async () => {
   const server: Server = createServer(app);
   const port: number = Number(process.env.PORT) ?? 3000;
 
-  await setupGraphQl(app);
+  await setupGraphQl(app, server);
   app.use(notFound);
 
   server.listen(port, () => {

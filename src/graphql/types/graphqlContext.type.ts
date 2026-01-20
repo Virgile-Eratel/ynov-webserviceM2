@@ -4,7 +4,7 @@ import { AuthServiceApi } from '../../interfaces/authServiceApi.interface';
 import { User } from '../../types/user';
 
 export type GraphQlContext = {
-  req: Request;
+  req?: Request;
   user?: User;
   services: {
     products: ProductsServiceApi;

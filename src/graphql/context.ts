@@ -17,13 +17,16 @@ const parseBearerToken = (req: Request): string | null => {
   return token;
 };
 
-export const buildContext = async (req: Request) => {
+export const buildContext = async (req: Request | undefined) => {
   let user: User | undefined = undefined;
-  const token: string | null = parseBearerToken(req);
-  if (token) {
-    const { id } = verify(token);
-    user = await getUserFromId(id);
+  if (req) {
+    const token: string | null = parseBearerToken(req);
+    if (token) {
+      const { id } = verify(token);
+      user = await getUserFromId(id);
+    }
   }
+
   return {
     req,
     user,

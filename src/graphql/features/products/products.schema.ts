@@ -22,6 +22,11 @@ type SccessResponse {
   success: Boolean!
 }
 
+type WsProductDeletedResponse {
+  id: String
+  success: Boolean!
+}
+
 input CreateProductInput {
   title: String!
   category: String!
@@ -51,4 +56,10 @@ extend type Mutation {
   updateProduct(id: ID!, input: UpdateProductInput): ResultProduct!
   deleteProduct(id: ID!): SccessResponse!
 }
-`
+
+extend type Subscription {
+  productCreated: Product!
+  productUpdated: Product!
+  productDeleted: WsProductDeletedResponse!
+}
+`;
