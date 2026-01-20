@@ -3,6 +3,7 @@ import { User } from '../types/user';
 import { FILE_JSON_USERS } from '../utils/constants';
 import { parseJsonFile, writeJsonFile } from '../utils/utils';
 import { UserModel } from '../models/userSchema.model';
+import mongoose from 'mongoose';
 
 export const getUsersByEmail = async (email: string) => {
   const eamilRegex = new RegExp(`^${email}$`, 'i');
@@ -11,6 +12,11 @@ export const getUsersByEmail = async (email: string) => {
 
   if(!user) return undefined
   return user;
+};
+
+export const getUserFromId = async (id: string) => {
+  const user = await UserModel.findById(new mongoose.Types.ObjectId(id));
+  return user?.toJSON() as unknown as User
 };
 
 export const createNewUser = (user: Omit<User, 'id'>): User => {
